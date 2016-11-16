@@ -84,7 +84,7 @@ if (isset($erreur)) : ?>
                 </div>
                 <?php if (isset($extension) && in_array($extension, $extensions)) : ?>
                     <div class="col-sm-9">
-                        <textarea id="code">
+                        <textarea id="code" name="contenu">
     <?= $cont ?>
 </textarea>
 
@@ -174,6 +174,8 @@ if (isset($erreur)) : ?>
                                 autoCloseTags: true,
                                 mode: "<?= isset($mode) ? $mode : "text/html" ?>",
                                 indentUnit: 4,
+                                foldGutter: true,
+                                gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
                                 extraKeys: {
                                     "Ctrl-Space": "autocomplete",
                                     "Ctrl-J": "toMatchingTag",
