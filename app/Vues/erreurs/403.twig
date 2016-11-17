@@ -1,0 +1,13 @@
+{# Erreur 403 - Accès interdit #}
+
+{% extends "templates/defaut.twig" %}
+
+{% block title %} Calendrier {% endblock %}
+
+{% block content %}
+    <div class="col-sm-12"> {{ motif }}</div>
+    <div class="col-sm-offset-4 col-sm-8">
+        <img src="../assets/img/403.png" alt="Erreur 403 : Accès refusé">
+    </div>
+{% endblock %}
+

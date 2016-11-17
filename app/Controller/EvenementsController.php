@@ -40,7 +40,17 @@ class EvenementsController extends AppController {
         $date = new Date();
         $year = date('Y');
         $dates = $date->all($year);
-        return $this->afficher('calendrier.index', compact('calendrier', 'calendriers', 'formCal', 'evenements', 'date', 'dates', 'year', 'form', 'id'));
+        return $this->affichertwig('calendrier.index', [
+                    'calendrier' => $calendrier,
+                    'calendriers' => $calendriers,
+                    'formCal' => $formCal,
+                    'evenements' => $evenements,
+                    'date' => $date,
+                    'dates' => $dates,
+                    'year' => $year,
+                    'form' => $form,
+                    'id' => $id
+        ]);
     }
 
     /**
@@ -189,7 +199,11 @@ class EvenementsController extends AppController {
             'min_fin' => $evenement->min_fin
         ]);
         $titre = 'Modifier un événement';
-        $this->afficher('evenements.edit', compact('evenement', 'form', 'titre'));
+        $this->affichertwig('evenements/edit', [
+            'evenement' => $evenement,
+            'form' => $form,
+            'titre' => $titre
+            ]);
     }
 
     /**

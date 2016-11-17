@@ -19,14 +19,13 @@ class ArticlesController extends AppController {
         parent::__construct();
         if (empty($_SESSION["auth"])) {
             $this->forbidden();
-        
         }
         $this->loadModele('Article');
     }
 
     public function index() {
         $articles = $this->Article->all();
-        $this->afficher('admin.articles.index', compact('articles'));
+        $this->affichertwig('admin/articles/index', ['articles' => $articles]);
     }
 
     /**
@@ -79,7 +78,12 @@ class ArticlesController extends AppController {
         }
         $form = new BootstrapForm($article);
         $titre = 'Modifier un article';
-        $this->afficher('admin.articles.edit', compact('article', 'categories', 'form', 'titre'));
+        $this->affichertwig('admin/articles/edit', [
+            'article' => $article,
+            'categories' => $categories,
+            'form' => $form,
+            'titre' => $titre
+        ]);
     }
 
     /**

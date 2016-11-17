@@ -26,7 +26,10 @@ class UtilisateursController extends AppController {
             }
         }
         $formConnexion = new BootstrapForm([$_POST]);
-        $this->afficher('utilisateurs.login', compact('formConnexion', 'errors'));
+        $this->affichertwig('utilisateurs/login', [
+            "formConnexion" => $formConnexion,
+            "errors" => $errors
+        ]);
     }
     
     public function logout() {
@@ -37,7 +40,9 @@ class UtilisateursController extends AppController {
     public function index() {
         $this->loadModele('Utilisateur');
         $utilisateurs = $this->Utilisateur->all();
-        $this->afficher('utilisateurs.index', compact('utilisateurs'));
+        $this->affichertwig('utilisateurs/index', [
+            "utilisateurs" => $utilisateurs
+        ]);
     }
 
 }

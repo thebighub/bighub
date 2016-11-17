@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use \App;
+
 /**
  * The Big Hub
  * @authors Matth Schmit (@MatthSchmit), Tim Chapelle (@timchapelle)
@@ -21,7 +22,11 @@ class ArticlesController extends AppController {
     public function index() {
         $articles = $this->Article->last();
         $categories = $this->Categorie->all();
-        $this->afficher('articles.index', compact('articles', 'categories'));
+        // $this->afficher('articles.index', compact('articles', 'categories'));
+        $this->affichertwig('articles/index', [
+            "articles" => $articles,
+            "categories" => $categories
+        ]);
     }
 
     public function categories() {
@@ -37,7 +42,10 @@ class ArticlesController extends AppController {
             $categories = $this->Categorie->all();
         }
         App::getInstance()->setTitre(($categorie->titre));
-        $this->afficher('articles.categories', compact('articles', 'categories', 'categorie'));
+        $this->affichertwig('articles/categories', [
+            'articles' => $articles,
+            'categories' => $categories,
+            'categorie' => $categorie]);
     }
 
     public function show() {
@@ -48,7 +56,10 @@ class ArticlesController extends AppController {
             $cat = ($article->categorie === null) ? 'Catégorie non définie' : $article->categorie;
             App::getInstance()->setTitre(($article->titre));
         }
-        $this->afficher('articles.show', compact('article', 'cat'));
+        $this->affichertwig('articles/show', [
+            'article' => $article,
+            'cat' => $cat
+        ]);
     }
 
 }

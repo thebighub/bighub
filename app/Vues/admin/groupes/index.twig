@@ -1,0 +1,53 @@
+{# Page d'administration des groupes d'utilisateurs #}
+{% extends "templates/defaut.twig" %}
+
+{% block title %} Groupes d'utilisateurs {% endblock %}
+
+{% block content %}
+<a href="?p=admin.groupes.add" class="btn btn-success-outline"><i class="fa fa-plus"></i> Ajouter un groupe</a>
+<table class="table ">
+    <thead>
+    <th>Id</th>
+    <th>Nom</th>
+</thead>
+
+{% for index,groupe in groupes %}
+    <tr>
+        <td>{{ groupe.id }}</td>
+        <td>{{ groupe.nom }}</td>
+        <td>
+            <a href="?p=admin.groupes.edit&id={{ groupe.id }}" 
+               class="btn btn-primary btn-sm">
+                <i class="fa fa-edit"></i>
+            </a>
+
+            <form action='?p=admin.groupes.delete' method="POST">
+                <input type="hidden" name="id" value="{{ groupe.id }}">
+                <button type="submit" class="btn btn-danger btn-sm">
+                    <i class="fa fa-trash-o"></i>                                                                                    </button>
+            </form>
+            <a href="#" data-toggle="modal" data-target="#membre{{ index }}"><i class="fa fa-eye"></i> Afficher membres</a>
+        </td>
+    </tr>
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="membre{{ index }}">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <ul class="list-group">
+                    {% for membre in groupe.membresGroupe %}
+                        <li class="list-group-item">
+                            <a href="index.php?p=utilisateurs.show&id={{ membre.id }}">
+                                <img src="../assets/img/avatar/{{ membre.avatar(membre) }}" class=" thumbnail" style="display:inline;width:50px;height:50px">
+
+                                {{ membre.prenom }} &nbsp; {{ membre.nom }}
+                            </a>
+                        </li>
+
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</table>
+{% endblock %}
+

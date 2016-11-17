@@ -1,0 +1,28 @@
+{# Vue d'un article unique #}
+{% extends "templates/defaut.twig" %}
+
+{% block title %} {{ article.titre }} {% endblock %}
+
+{% block content %}
+    <a href="index.php">
+        <i class="fa fa-newspaper-o"></i> 
+        Retour
+    </a>
+    <h4><span class="label label-info">
+            <a href='index.php?p=articles.categories&id={{ article.cat_id }}'>
+            {{ cat }}
+            </a>
+        </span>
+        {% if session.auth != '' %}
+            <a href="index.php?p=admin.articles.edit&id={{ article.id }}">
+                <h3>
+                    <span class="label label-default pull-right">
+                        <i class="fa fa-edit"></i>
+                    </span>
+                </h3>
+            </a>
+        {% endif %}
+    </h4>
+    <h2>{{ article.titre }}&nbsp;<small>{{ article.date | date('d/m/Y , H:i') }}</small></h2>
+    <p>{{ article.contenu | raw }}</p>
+{% endblock %}

@@ -1,0 +1,18 @@
+{# Edition d'un article #}
+{% extends "templates/defaut.twig" %}
+
+{% block title %} {{ titre }} {% endblock %}
+
+{% block content %}
+    <h2> {{ titre }} </h2>
+    <form method='POST'>
+
+        {{ form.input('titre', 'text', 'Titre') | raw}}
+        {{ form.input('contenu', 'textarea', 'Contenu') | raw }}
+        {{ form.select('categorie', 'Catégorie', categories) | raw }}
+        {{ form.submit('sauvegarder') }}
+
+    </form>
+{% endblock %}
+
+

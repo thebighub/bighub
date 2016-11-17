@@ -1,0 +1,24 @@
+{# Page de connexion #}
+
+{% extends "templates/defaut.twig" %}
+
+{% block title %} Utilisateurs {% endblock %}
+
+{% block content %}
+
+    {% if errors %}
+        <div class="alert alert-danger">
+            Identifiants incorrects, veuillez ré-essayer
+        </div>
+    {% endif %}
+
+    <form method='POST'>
+
+        {{ formConnexion.input('login', 'text', 'Login') | raw }}
+        {{ formConnexion.input('password', 'password', 'Mot de passe') | raw }}
+        {{ formConnexion.submit('connexion') }}
+        {{ formConnexion.input('action', 'hidden') | raw }}
+    </form>
+
+{% endblock %}
+

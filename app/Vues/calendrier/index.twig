@@ -1,0 +1,310 @@
+{# Page d'accueil du calendrier #}
+
+{% extends "templates/defaut.twig" %}
+
+{% block title %} Calendrier {% endblock %}
+
+{% block content %}
+    
+{% if calendriers is defined %}
+    <div class="input-group">
+        <form action="index.php?p=calendriers.index" method="POST">
+            {{ formCal.select('choixCal', '<i class="fa fa-calendar-o"></i>', calendriers) | raw }}
+            <div class="btn-group">
+                <button class="btn btn-primary-outline" type="submit" name="confirmer" value="confirmer">Confirmer</button>
+                <button class="btn btn-primary-outline" type="button" 
+                        data-toggle="collapse" href="#divAjoutCal" name="ajoutCal" 
+                        value="ajoutCal">
+                    <i class="fa fa-plus"></i>
+                </button>
+            </div>
+
+        </form>
+    </div>
+    <div class="collapse" id="divAjoutCal">
+        <form action="index.php?p=calendriers.add" method="POST">
+            {{ form.input('title', 'text', 'Nom') | raw }}
+            {{ form.submit('ajouter') }}
+        </form>
+    </div>
+    <h1>{{ calendrier.titre }}</h1>
+    <div class="periodes">
+        <div class="annee">
+            <h3>
+                <a href="index.php?p=calendriers.index&id={{ session.auth }}&year={{ year - 1 }}">
+                    <span class="badge"><i class="fa fa-chevron-left"></i>
+                    </span>
+                </a>
+                &nbsp;
+                <span class="label label-info">{{ year }}</span>
+                &nbsp;
+                <a href="index.php?p=calendriers.index&id={{ session.auth }}&year={{ year + 1 }}">
+                    <span class="badge">
+                        <i class="fa fa-chevron-right"></i>
+                    </span>
+                </a>
+            </h3>
+        </div>
+        <div class="choixmois">
+            <ul>
+                {% for id, mois in date.mois %}
+                    <li><a href="#" id="lienMois{{ id + 1 }}">
+                            <span class="label label-primary"> 
+                                {{ mois | slice(0,3) | convert_encoding('UTF-8', 'UTF-8') }}
+                                {# utf8_encode(substr(utf8_decode($mois), 0, 3)) #}
+                            </span>
+                        </a>
+                    </li>
+
+                {% endfor %}
+            </ul>
+        </div>
+        {% set dates = dates[year] %}
+        {% for mois, jours in dates %}
+            <div class="mois" id="mois{{ mois }}">
+                <table class="table table-striped">
+                    <thead>
+                        {% for jour in dates.getJours() %}
+                        <td>{{ jour }}</td>
+                    {% endfor %}
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {% set end = end[jours] %}
+                            {% for j, w in jours %}
+                                {% set time = (year ~ "-" ~ mois ~ "-" ~ j) | date('U') %}
+                                {% if (time == ("now" | date('U'))) %}
+                                    {% set classeJour = 'aujourdhui' %}
+                                {% elseif w >= 6 %}
+                                    {% set classeJour = 'weekend' %}
+                                {% else %}
+                                    {% set classeJour = 'jour' %}
+                                {% endif %}
+
+                                {% if ((j == 1) and (w - 1) != 0) %}
+                                    <td colspan="{{ w - 1 }}"></td>
+                                {% endif %}
+                                <td class="{{ classeJour }}}">
+                                    <span class="badge">{{ j }}</span>
+                                    {% if time >= ("now" | date('U')) %}
+                                        <span class="pull-right label label-info">
+                                            <i class="fa fa-plus"  onclick="ajout({{ "now" | date('H') }}','{{("now" | date('U'))}}','{{ time }})"></i>
+                                        </span>
+                                    {% endif %}
+
+                                    {% for id, evenement in evenements %}
+                                        {% if (evenement.date_debut | date('U')) == time %}
+                                            <!-- Evenements -->
+                                <li class="events" >
+
+                                    <!-- Popover -->
+                                    <div id="pop{{ id }}"         
+                                         data-toggle="popover" 
+                                         data-placement="{{ w < 5 ? 'right' : 'left' }}" 
+                                         data-title="<b>{{ evenement.titre }}</b>"
+                                         data-content="{{ evenement.contenu }}"
+                                         data-html="true">
+                                    </div>
+                                    <!-- Lien vers le modal -->
+                                    <a data-target="#modal{{ id }}" 
+                                       onmouseover="showPopover( {{ id }} )" 
+                                       data-toggle="modal" 
+                                       data-target=".bs-example-modal-md">
+                                        <span class="label label-success">
+                                            {{ 
+                                               evenement.heure_debut is null ? 
+                                                "Toute la journée" :
+                                               evenement.heure_debut ~ 'h' ~ (('0' ~ (evenement.min_debut)) | slice(1,2)) 
+                                               
+                                            }}
+                                        </span>
+                                    </a>
+                                </li>
+                                <!-- Modal événement -->
+                                <div id="modal{{ id }}" class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-labelledby="DescriptionEvenement">
+                                    <div class="modal-dialog modal-md" role="document">
+                                        <div class="modal-content">
+
+                                            <div class="container">
+                                                <h3>{{ evenement.titre }}</h3>
+                                                <h4>
+                                                    <span class="label label-primary">
+                                                        <i class="fa fa-calendar-check-o fa-fw"></i>
+                                                        {{ j ~ '/' ~ mois }}
+
+                                                    </span>
+                                                    &nbsp;
+                                                    <span class="label label-warning">
+                                                        <i class="fa fa-clock-o"></i>
+                                                        {{ evenement.heure_debut is null ? 'Toute la journée' : (('0' ~ evenement.heure_debut) | slice(1,2)) ~ 'h' ~ (('00' ~ evenement.min_debut) | slice(1,2)) }}
+                                                        {{ evenement.heure_fin is null ? '' : (' - ' ~ (('0' ~ evenement.heure_fin) | slice(1,2))) ~ 'h' ~ (('00' ~ evenement.min_fin) | slice(1,2)) }}
+                                                    </span>
+                                                    &nbsp;
+                                                    {% set parent = evenement.isParent() %}
+                                                    {% if parent %}
+                                                        {% set enfants = evenement.enfants %}
+                                                        <span class="label label-default">Parent : {{ enfants.nb }} enfants
+
+                                                        </span>
+                                                    {% endif %}
+                                                    {% set enfant = evenement.isEnfant() %}
+                                                    {% if enfant %}
+                                                        <span class="label label-default">Enfant</span>
+
+                                                    {% endif %}
+
+                                                </h4>
+
+                                                {% if session.auth == evenement.user_id %}
+
+                                                    <div class="btn-group" role="group" aria-label="...">
+
+                                                        <form action="index.php?p=evenements.edit" method="POST" style="display:inline-block">
+                                                            <input type="hidden" name="id" value="{{ evenement.id }}">
+                                                            <input type="hidden" name="calendrier_id" value="{{ evenement.calendrier_id }}">
+                                                            <input type="hidden" name="time" value="{{ evenement.date_debut | date('U') }}">
+
+                                                            <button type="button" class="btn btn-primary-outline">
+                                                                <i class="fa fa-edit"></i>
+                                                            </button>
+                                                        </form>
+                                                        <button type="button" class="btn btn-danger-outline" 
+                                                                id="btnDelete" 
+                                                                onclick="toggleChoixDelete( {{ evenement.id }} )">
+                                                            <i class="fa fa-trash-o"></i>
+                                                        </button>
+                                                    </div>
+                                                    <form action="index.php?p=evenements.delete" method="POST">
+                                                        <input type="hidden" name="id" value="{{ evenement.id }}">
+                                                        <input type="hidden" name="calendrier_id" value="{{ evenement.calendrier_id }}">
+                                                        <input type="hidden" name="date_debut" value="{{ evenement.date_debut }}">
+                                                        <input type="hidden" name="parent_id" value="{{ evenement.parent_id is null ? evenement.id : evenement.parent_id }}">
+                                                        <div class="hide" id="choixDelete{{ evenement.id }}">
+                                                            <div class="checkbox">
+                                                                <label><input name="only1" id="only1" type="checkbox">Seulement celui-ci</label>
+                                                            </div>
+                                                            <div class="checkbox">
+                                                                <label><input name="all" id="all" type="checkbox">Tous</label>
+                                                            </div>
+                                                            <div class="checkbox">
+                                                                <label><input name="previous" id="previous" type="checkbox">Les précédents</label>
+                                                            </div>
+                                                            <div class="checkbox">
+                                                                <label><input name="next" id="next" type="checkbox">Les suivants</label>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-danger" id="confirmDelete"><i class="fa fa-trash-o"></i></button>
+                                                        </div>
+                                                    </form>
+                                                {% endif %}
+                                                <p>{{ evenement.contenu }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        </td>
+                        {% if w == 7 %}
+                        </tr><tr>
+                    {% endif %}
+                {% endfor %}
+                {% if end != 7 %}
+                    <td colspan="{{ 7 - end }}"></td>
+                {% endif %}
+            </tr>
+            </tbody>
+        </table>
+    </div>
+{% endfor %}
+
+</div>
+<!-- Modal ajout article -->
+<div id="ajoutEvent" class="modal fade bs-example-modal-md" tabindex="-1" role="dialog">
+
+    <div class="modal-dialog modal-md" role="document">
+
+        <div class="modal-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h5>Ajouter un événement</h5>
+                        <form action="index.php?p=evenements.add" method="POST">
+                            <input name="date_debut" id="date_debut" type="date" disabled="disabled">
+                            <div class="error alert alert-danger" id="erreurTitre"></div>
+                            {{ form.input('titre', 'text', 'Titre') | raw }} 
+                            <div class="error alert alert-danger" id="erreurTitre"></div>
+                            {{ form.input('contenu', 'textarea', 'Contenu') | raw }}
+                            <div class="alert alert-danger error" id="erreurH"></div>
+                            {{ form.time('debut', 'Début') | raw }}
+                            {{ form.time('fin', 'Fin') | raw }}
+                            <input type="hidden" name="calendrier_id" value="{{ calendrier.id }}">
+                            <input type="hidden" name="user_id" value="{{ session.auth }}">
+                                   <div class="checkbox">
+                                <label><input name="journee" id="journee" type="checkbox">Journée entière</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input name="recur" id="recur" type="checkbox">Récurrent</label>
+                            </div>
+                            <div class="checkbox-inline hide" id="choixQuoti">
+                                <label><input name="quoti" id="quoti" type="checkbox">Quotidien</label>
+                            </div>
+                            <div class="checkbox-inline hide" id="choixHebdo">
+                                <label><input name="hebdo" id="hebdo" type="checkbox">Hebdomadaire</label>
+                            </div>
+
+                            <div class="checkbox-inline hide" id="choixMensu">
+                                <label><input name="mensu" id="mensu" type="checkbox">Mensuel</label>
+                            </div>
+
+                            <div class="checkbox-inline hide" id="choixXfois">
+                                <label><input name="xfois" id="xfois" type="checkbox">x fois</label>
+                            </div>
+
+                            <div class="form-group hide" id="choixNbXfois">
+                                <label for="nbXfois">Nombre de fois : </label><input name="nbXfois" id="nbXfois" type="number">
+                            </div>
+                            <div class="form-group hide" id="choixRecur_fin">
+                                <label for="recur_fin">Fin : </label><input name="recur_fin" id="recur_fin" type="date">
+                            </div>
+                            <div class="clearfix"></div>
+                            <button type="submit" class="btn btn-primary" name="ajouter" id="ajouter" value="ajouter">ajouter</button>
+                        </form>
+                    </div>
+                    <div class="col-sm-3">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Fin modal ajout article -->
+{% else %}
+    <button class="btn btn-primary-outline" type="button" data-toggle="collapse" href="#divAjoutCal2" name="ajoutCal2" value="ajoutCal2"><i class="fa fa-plus"></i>Créer votre calendrier</button>
+    <div class="collapse" id="divAjoutCal2">
+        <form action="index.php?p=calendriers.add" method="POST">
+
+            {{ form.input('title', 'text', 'Nom') | raw }}
+            {{ form.submit('ajouter') }}
+        </form>
+    </div>
+{% endif %}
+<div id="show"></div>
+<script>
+    /**
+     $(document).ready(
+     function () {
+     setInterval(function () {
+     var randomnumber = Math.floor(Math.random() * 100);
+     $('#show').text(
+     'I am getting refreshed every 3 seconds..! Random Number ==> '
+     + randomnumber);
+     }, 3000);
+     });
+     **/
+</script>
+<script src="../assets/js/validationEvenement.js"></script>
+
+{% endblock %}
+

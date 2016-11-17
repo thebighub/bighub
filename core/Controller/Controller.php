@@ -2,6 +2,9 @@
 
 namespace Core\Controller;
 
+use Twig_Environment;
+use Twig_Loader_Filesystem;
+
 /**
  * The Big Hub
  * @authors Matth Schmit (@MatthSchmit), Tim Chapelle (@timchapelle)
@@ -13,6 +16,10 @@ class Controller {
 
     protected $viewPath;
     protected $template;
+    
+    public function __construct() {
+        
+    }
 
     protected function afficher($vue, $variables = []) {
         ob_start();
@@ -24,13 +31,18 @@ class Controller {
         require ($this->viewPath . 'templates/' . $this->template . '.php');
     }
 
-    protected function forbidden() {
-        header('Location:index.php?p=erreurs.erreur403');
-    }
+    protected function affichertwig($vue, $variables = []) {
+        global $twig;
+        echo $twig->render($vue . '.twig', $variables);    
+}
 
-    protected function notFound() {
-        header('HTTP/1.0 404 Not Found');
-        header('Location:index.php?p=erreurs.404');
-    }
-    
+protected function forbidden() {
+header('Location:index.php?p=erreurs.erreur403');
+}
+
+protected function notFound() {
+header('HTTP/1.0 404 Not Found');
+header('Location:index.php?p=erreurs.404');
+}
+
 }

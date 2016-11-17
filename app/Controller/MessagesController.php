@@ -60,7 +60,11 @@ class MessagesController extends AppController {
         $form = new BootstrapForm($_POST);
         $utilisateurs = $this->Utilisateur->liste('id', 'login');
         $titre = 'Envoyer un message';
-        $this->afficher('messages.edit', compact('form', 'utilisateurs', 'titre'));
+        $this->affichertwig('messages/edit', [
+            'form' => $form,
+            'utilisateurs' => $utilisateurs,
+            'titre' => $titre
+            ]);
     }
 
     public function edit() {
@@ -78,7 +82,9 @@ class MessagesController extends AppController {
         $user = $this->Utilisateur->find($this->user);
         $messages = $this->Message->all($this->user);
         App::getInstance()->setTitre('Boîte de réception');
-        return $this->afficher('messages.index', compact('messages'));
+        return $this->affichertwig('messages/index', [
+            'messages' => $messages
+            ]);
     }
 
     public function show() {
@@ -86,8 +92,9 @@ class MessagesController extends AppController {
         if ($message->vu == 0) {
             $this->Message->update($_GET["id"], ["vu" => 1]);
         }
-        App::getInstance()->setTitre($message->sujet);
-        return $this->afficher('messages.show', compact('message'));
+        return $this->affichertwig('messages/show', [
+            "message" => $message
+        ]);
     }
 
 }

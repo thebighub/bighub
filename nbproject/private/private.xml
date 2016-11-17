@@ -2,6 +2,32 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/var/www/html/bighub/app/Controller/EditeursController.php</file>
+            <file>file:/var/www/html/bighub/app/Vues/messages/edit.twig</file>
+            <file>file:/var/www/html/bighub/app/Vues/utilisateurs/index.php</file>
+            <file>file:/var/www/html/bighub/app/Vues/evenements/edit.twig</file>
+            <file>file:/var/www/html/bighub/app/Vues/messages/show.php</file>
+            <file>file:/var/www/html/bighub/app/Vues/utilisateurs/login.php</file>
+            <file>file:/var/www/html/bighub/app/Controller/UtilisateursController.php</file>
+            <file>file:/var/www/html/bighub/app/Vues/calendrier/index.twig</file>
+            <file>file:/var/www/html/bighub/app/Vues/utilisateurs/index.twig</file>
+            <file>file:/var/www/html/bighub/app/Vues/messages/index.twig</file>
+            <file>file:/var/www/html/bighub/public/index.php</file>
+            <file>file:/var/www/html/bighub/app/Controller/MessagesController.php</file>
+            <file>file:/var/www/html/bighub/core/Date/Date.php</file>
+            <file>file:/var/www/html/bighub/app/Vues/articles/categories.twig</file>
+            <file>file:/var/www/html/bighub/app/Vues/messages/index.php</file>
+            <file>file:/var/www/html/bighub/app/Vues/templates/defaut.twig</file>
+            <file>file:/var/www/html/bighub/app/Vues/editeur/index.php</file>
+            <file>file:/var/www/html/bighub/app/Vues/admin/trame/topbar.twig</file>
+            <file>file:/var/www/html/bighub/app/Vues/messages/show.twig</file>
+            <file>file:/var/www/html/bighub/app/Vues/messages/edit.php</file>
+            <file>file:/var/www/html/bighub/app/Vues/utilisateurs/show.twig</file>
+            <file>file:/var/www/html/bighub/app/Vues/utilisateurs/show.php</file>
+            <file>file:/var/www/html/bighub/app/Vues/utilisateurs/login.twig</file>
+            <file>file:/var/www/html/bighub/app/Controller/EvenementsController.php</file>
+            <file>file:/var/www/html/bighub/app/Controller/ErreursController.php</file>
+        </group>
     </open-files>
 </project-private>

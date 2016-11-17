@@ -36,6 +36,7 @@ class DbAuth {
             if ($user->password === md5($pass)) {
                 $_SESSION["auth"] = $user->id;
                 $_SESSION["login"] = $user->login;
+                $_SESSION["avatar"] = $user->avatar;
                 return true;
             }
         }

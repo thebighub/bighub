@@ -20,8 +20,12 @@ class GroupesController extends AppController {
     
     public function index() {
         $groupes = $this->Groupe->all();
-        App::getInstance()->setTitre(('Groupes'));
-        $this->afficher('admin.groupes.index', compact('groupes'));
+        foreach ($groupes as $groupe) {
+           $groupe->membresGroupe = App::getInstance()->getTable('Groupe')->getGroupMembers($groupe->id); 
+        }
+        $this->affichertwig('admin/groupes/index', [
+            'groupes' => $groupes
+        ]);
     }
 
     /**
@@ -39,8 +43,10 @@ class GroupesController extends AppController {
         }
         $form = new BootstrapForm($_POST);
         $titre = 'Ajouter un groupe';
-        App::getInstance()->setTitre($titre);
-        $this->afficher('admin.groupes.edit', compact('form', 'titre'));
+        $this->affichertwig('admin/groupes/edit', [
+            'form' => $form,
+            'titre' => $titre
+            ]);
     }
 
     /**
@@ -65,8 +71,11 @@ class GroupesController extends AppController {
         }
         $form = new BootstrapForm($groupe);
         $titre = 'Modifier un groupe';
-        App::getInstance()->setTitre($titre);
-        $this->afficher('admin.groupes.edit', compact('groupe', 'form', 'titre'));
+        $this->affichertwig('admin/groupes/edit', [
+            'groupe' => $groupe,
+            'form'   => $form,
+            'titre'  => $titre
+            ]);
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 
 namespace Core\Date;
-
+use DateTime;
 /**
  * The Big Hub
  * @authors Matth Schmit (@MatthSchmit), Tim Chapelle (@timchapelle)
@@ -25,7 +25,7 @@ class Date {
      */
     public function all($year) {
         $tab = [];
-        $date = new \DateTime($year.'-01-01');
+        $date = new DateTime($year.'-01-01');
 
         while ($date->format('Y') <= $year) {
             

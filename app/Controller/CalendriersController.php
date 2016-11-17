@@ -46,9 +46,18 @@ class CalendriersController extends AppController {
         $form = new BootstrapForm($_POST);
         $formCal = new BootstrapForm($calendriers);
         $date = new Date();
-        $year = isset($_GET["year"]) ? $_GET["year"]: date('Y');
+        $year = isset($_GET["year"]) ? $_GET["year"] : date('Y');
         $dates = $date->all($year);
-        return $this->afficher('calendrier.index', compact('calendrier', 'calendriers', 'formCal', 'evenements', 'form', 'dates', 'year', 'date'));
+        return $this->affichertwig('calendrier/index', [
+            'calendrier' => $calendrier,
+            'calendriers' => $calendriers,
+            'formCal' => $formCal, 
+            'evenements' => $evenements,
+            'form' => $form,
+            'dates' => $dates,
+            'year' => $year,
+            'date' => $date
+            ]);
     }
 
     public function add() {

@@ -22,7 +22,9 @@ class CategoriesController extends AppController {
 
     public function index() {
         $categories = $this->Categorie->all();
-        $this->afficher('admin.categories.index', compact('categories'));
+        $this->affichertwig('admin/categories/index', [
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -42,7 +44,10 @@ class CategoriesController extends AppController {
         }
         $form = new BootstrapForm($_POST);
         $titre = 'Créer une catégorie';
-        $this->afficher('admin.categories.edit', compact('form','titre'));
+        $this->affichertwig('admin/categories/edit', [
+            'form' => $form,
+            'titre' => $titre
+        ]);
     }
 
     /**

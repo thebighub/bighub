@@ -12,6 +12,7 @@ class App {
     private static $_instance;
     // Titre de la page, dynamique
     public $titre = 'The Big Hub';
+    
 
     public static function load() {
         session_start();
@@ -19,6 +20,8 @@ class App {
         App\Autoloader::register();
         require ROOT . '/core/Autoloader.php';
         Core\Autoloader::register();
+
+        
     }
 
     public static function getInstance() {
@@ -27,6 +30,7 @@ class App {
         }
         return self::$_instance;
     }
+
     /**
      * Obtenir l'accès à 
      * @param string $name Le nom de la table

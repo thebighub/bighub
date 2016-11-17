@@ -25,10 +25,12 @@ VideOO - Site collaboratif (avec api allocine en prime)
     <head>
         <meta charset="UTF-8">
         <title><?= $app->titre ?></title>
-    </head>
-    <body><?php
+        <?php
         include (ROOT . '/app/Vues/trame/head.php');
-
+        ?>
+    </head>
+    <body>
+        <?php
         if (isset($currentUser) && $currentUser->admin) {
             include (ROOT . '/app/Vues/admin/trame/topbar.php');
         } else if (!empty($_SESSION["auth"])) {

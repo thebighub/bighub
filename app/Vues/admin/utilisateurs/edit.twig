@@ -1,0 +1,29 @@
+{# Ajout / Modification d'un utilisateur #}
+
+{% extends "templates/defaut.twig" %}
+
+{% block title %} {{ titre }} {% endblock %}
+
+{% block content %}
+    <h2> {{ titre }} </h2>
+    {% if erreur != '' %}
+        <div class="alert alert-warning">
+            {% for erreur, err in erreurs %}
+                {{ err }} <br>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <form method='POST'>
+        {{ form.input('nom', 'text', 'Nom') | raw }}
+        {{ form.input('prenom', 'text', 'Prénom') | raw }}
+        {{ form.input('login', 'text', 'Login') | raw }}
+        {{ form.input('mail', 'email', 'Adresse e-mail') | raw }}
+        {{ form.input('password', 'text', 'Mot de passe') | raw }}
+        {% if utilisateur is null %}
+            {{ form.input('password2', 'text', 'Confirmer le mot de passe') |raw }}
+        {% endif %}
+        {{ form.select('groupe_id', 'Groupe', groupes) | raw }}
+        {{ form.submit('sauvegarder') }}
+    </form>
+{% endblock %}
+

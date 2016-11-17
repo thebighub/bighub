@@ -73,12 +73,12 @@ if (isset($erreur)) : ?>
 </div>
 <div class="col-sm-4">
     <form action="index.php?p=editeurs.index" method="POST" enctype="multipart/form-data">
-        <label for="fichier" class="btn btn-primary-outline"><i class="fa fa-folder-open-o"></i></label>
+        <label class='btn btn-default btn-group' for="fichier"><i class="fa fa-folder-open-o"></i></label>
         <input  type="file" name="fichier" id="fichier" class="hide">
-
-            <button class="btn btn-default" type="submit" name="ok" id="ok">Afficher</button>
-            <button class="btn btn-success-outline" type="submit" name="save" id="save">Sauvegarder</button>
-
+        <div class='btn-group'>
+            <button class="btn btn-default btn-group" type="submit" name="ok" id="ok">Afficher</button>
+            <button class="btn btn-default btn-group" type="submit" name="save" id="save">Sauvegarder</button>
+        </div>
 
             <br>
                 </div>

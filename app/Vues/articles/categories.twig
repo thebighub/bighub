@@ -1,0 +1,23 @@
+
+{# Affichage des articles d'une catégorie #}
+
+{% extends "templates/defaut.twig" %}
+
+{% block title %} {{ categorie.titre }} {% endblock %}
+
+{% block content %}
+    <a href='index.php?p=articles.index'>
+        <i class='fa fa-home fa-newspaper-o fa-fw'></i> Retour
+    </a>
+    <h1><span class="label label-primary">{{ categorie.titre }}</span></h1>
+
+    {% for article in articles %}
+        <h2>
+            <a href="{{ article.url }}">
+                {{ article.titre }}
+            </a>
+        </h2>
+        <small>{{ article.date }}</small>
+        <p>{{ article.contenu }}</p>
+    {% endfor %}
+{% endblock %}

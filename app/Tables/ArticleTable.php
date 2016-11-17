@@ -36,7 +36,7 @@ class ArticleTable extends Table {
     }
 
     public function findWithCategory($id) {
-        return $this->requete("SELECT articles.id,articles.titre,articles.contenu,articles.date,categories.titre as categorie"
+        return $this->requete("SELECT articles.id,articles.titre,articles.contenu,articles.date,categories.titre as categorie, categories.id as cat_id"
                         . " FROM articles LEFT JOIN categories "
                         . "ON articles.categorie_art = categories.id WHERE articles.id = ?", [$id], get_called_class(), true);
     }

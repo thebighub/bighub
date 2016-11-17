@@ -1,0 +1,75 @@
+{#
+<?php
+
+// use Core\Auth\DbAuth;
+{% set app = AppGetInstance() %}
+{% if session.auth is defined %}
+   {% set currentUser = app.getTable('Utilisateur').find(session.auth) %}
+}
+
+?>
+/**
+ * The Big Hub
+ * @authors Matth Schmit (@MatthSchmit), Tim Chapelle (@timchapelle)
+ * https://github.com/thebighub
+ *
+ * Template (gabarit) par défaut du site
+ */
+#}
+<!DOCTYPE html>
+<!--
+
+The Big Hub - Plateforme libre
+
+-->
+<html>
+    <head>
+        {% block head %}
+            <meta charset="UTF-8">
+            <title>{% block title %}{% endblock %} | The Big Hub</title>
+
+            {% include 'trame/head.php' %}
+
+        {% endblock %}
+    </head>
+    <body>
+        {% if session.auth != '' %}
+            {% include 'admin/trame/topbar.twig' %}
+            {# include 'membres/trame/topbar.php' #}
+        {% else %}
+            {% include 'trame/topbar.twig' %}
+        {% endif %}
+
+        <div class="container-fluid">
+            <div class="section">
+                <div class="row">
+
+                    <div class=col-sm-3>
+                        {% block sidebar %}{% endblock %}
+                            {% if session.auth != '' and session.auth == 1 %}
+
+                                {% include 'admin/trame/sidebar.twig'%}
+
+                            {% elseif session.auth != '' %}
+
+                                {% include '/membres/trame/sidebar.twig' %}
+
+
+                            {% endif %}
+                        </div>
+                    
+
+                    <div class="col-sm-9">
+
+                        {% block content %}
+                        {% endblock %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% include 'trame/footer.twig' %}
+    </body>
+</html>
+
+

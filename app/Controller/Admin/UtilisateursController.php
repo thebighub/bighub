@@ -23,7 +23,9 @@ class UtilisateursController extends AppController {
 
     public function index() {
         $utilisateurs = $this->Utilisateur->all();
-        $this->afficher('admin.utilisateurs.index', compact('utilisateurs'));
+        $this->affichertwig('admin/utilisateurs/index', [
+            'utilisateurs' => $utilisateurs
+        ]);
     }
 
     /**
@@ -64,7 +66,12 @@ class UtilisateursController extends AppController {
         $this->loadModele('Groupe');
         $groupes = $this->Groupe->liste('id', 'nom');
         $titre = 'Ajouter un utilisateur';
-        $this->afficher('admin.utilisateurs.edit', compact('form', 'groupes', 'titre', 'erreurs'));
+        $this->affichertwig('admin/utilisateurs/edit', [
+            'form' => $form,
+            'groupes' => $groupes,
+            'titre' => $titre,
+            'erreurs' => $erreurs
+        ]);
     }
 
     /**
@@ -98,7 +105,12 @@ class UtilisateursController extends AppController {
         $form = new BootstrapForm($utilisateur);
 
         $titre = 'Modifier un utilisateur';
-        $this->afficher('admin.utilisateurs.edit', compact('utilisateur', 'groupes', 'form', 'titre'));
+        $this->affichertwig('admin/utilisateurs/edit', [
+            'utilisateur' => $utilisateur,
+            'groupes' => $groupes,
+            'form' => $form,
+            'titre' => $titre
+        ]);
     }
 
     /**
